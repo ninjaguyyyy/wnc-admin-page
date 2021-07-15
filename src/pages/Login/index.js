@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import "../css/login.css";
+import "../../css/login.css";
 
-import WaveImage from "../images/login/wave.png";
-import AvatarImage from "../images/login/avatar.svg";
-import BgImage from "../images/login/bg.svg";
+import WaveImage from "../../images/login/wave.png";
+import AvatarImage from "../../images/login/avatar.svg";
+import BgImage from "../../images/login/bg.svg";
 
 export default function Login() {
   const [isFocusUsername, setIsFocusUsername] = useState(false);

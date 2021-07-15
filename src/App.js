@@ -7,7 +7,6 @@ import { focusHandling } from "cruip-js-toolkit";
 import "./charts/ChartjsConfig";
 
 // Import pages
-import Dashboard from "./pages/Dashboard";
 import Users from "./pages/Users";
 import Categories from "./pages/Categories";
 import Courses from "./pages/Courses";

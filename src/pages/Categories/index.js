@@ -1,14 +1,11 @@
 import Button from "@material-ui/core/Button";
 import React, { useState } from "react";
-import { MdDirectionsBike, MdLocalHotel } from "react-icons/md";
-import DashboardAvatars from "../../partials/dashboard/DashboardAvatars";
-import DashboardCard06 from "../../partials/dashboard/DashboardCard06";
-import DashboardCard07 from "../../partials/dashboard/DashboardCard07";
-import DashboardCard10 from "../../partials/dashboard/DashboardCard10";
-import DashboardCard11 from "../../partials/dashboard/DashboardCard11";
+import { MdQueue } from "react-icons/md";
 import WelcomeBanner from "../../partials/dashboard/WelcomeBanner";
 import Header from "../../partials/Header";
 import Sidebar from "../../partials/Sidebar";
+import CategoriesList from "./components/CategoriesList";
+import CategoriesTree from "./components/CategoriesTree";
 
 function Categories() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -23,41 +20,16 @@ function Categories() {
         <main>
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
             <WelcomeBanner />
-
-            <div className="sm:flex sm:justify-between sm:items-center mb-8">
-              <div className="mb-5">
-                <div className="mr-3 inline">
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    startIcon={<MdDirectionsBike />}
-                  >
-                    Students
-                  </Button>
-                </div>
-
-                <Button
-                  variant="contained"
-                  color="primary"
-                  startIcon={<MdLocalHotel />}
-                >
-                  Teachers
-                </Button>
-              </div>
-
-              <DashboardAvatars />
+            <h1 className="heading mb-8">Categories Management</h1>
+            <div className="sm:flex sm:justify-end sm:items-center mb-3">
+              <Button variant="contained" color="primary" endIcon={<MdQueue />}>
+                Add New
+              </Button>
             </div>
 
             <div className="grid grid-cols-12 gap-6">
-              {/* Doughnut chart (Top Countries) */}
-              <DashboardCard06 />
-              {/* Table (Top Channels) */}
-              <DashboardCard07 />
-
-              {/* Card (Customers) */}
-              <DashboardCard10 />
-              {/* Card (Reasons for Refunds) */}
-              <DashboardCard11 />
+              <CategoriesTree />
+              <CategoriesList />
             </div>
           </div>
         </main>
