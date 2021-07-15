@@ -7,9 +7,22 @@ import Header from "../../partials/Header";
 import Sidebar from "../../partials/Sidebar";
 import UsersChart from "./components/UsersChart";
 import UsersTable from "./components/UsersTable";
+import UserDialog from "./components/UserDialog";
+
+export const TYPE_USER_DIALOG = {
+  VIEW: 1,
+  EDIT: 2,
+};
 
 function Users() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [openUserDialog, setOpenUserDialog] = useState(false);
+  const [typeUserDialog, setTypeUserDialog] = useState(TYPE_USER_DIALOG.VIEW);
+
+  const onOpenUserDialog = (type) => {
+    setOpenUserDialog(true);
+    setTypeUserDialog(type);
+  };
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -50,11 +63,22 @@ function Users() {
 
             <div className="grid grid-cols-12 gap-6">
               <UsersChart />
-              <UsersTable />
+              <UsersTable
+                openUserDialogWithType={(type) => {
+                  setOpenUserDialog(true);
+                  setTypeUserDialog(type);
+                }}
+              />
             </div>
           </div>
         </main>
       </div>
+
+      <UserDialog
+        open={openUserDialog}
+        close={() => setOpenUserDialog(false)}
+        type={typeUserDialog}
+      ></UserDialog>
     </div>
   );
 }

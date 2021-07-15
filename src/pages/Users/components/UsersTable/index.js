@@ -13,8 +13,10 @@ import Image02 from "../../../../images/user-36-06.jpg";
 import Image03 from "../../../../images/user-36-07.jpg";
 import Image04 from "../../../../images/user-36-08.jpg";
 import Image05 from "../../../../images/user-36-09.jpg";
+import { TYPE_USER_DIALOG } from "../..";
 
-function UsersTable() {
+function UsersTable(props) {
+  const { openUserDialogWithType } = props;
   const customers = [
     {
       id: "0",
@@ -124,7 +126,12 @@ function UsersTable() {
                     <td className="p-2 whitespace-nowrap">
                       <div className="text-lg text-right">
                         <Tooltip title="View" className="">
-                          <Button style={{ minWidth: 0 }}>
+                          <Button
+                            onClick={() =>
+                              openUserDialogWithType(TYPE_USER_DIALOG.VIEW)
+                            }
+                            style={{ minWidth: 0 }}
+                          >
                             <MdRemoveRedEye
                               color="#2da040"
                               className="inline icon-size-small action-icon"
@@ -132,7 +139,12 @@ function UsersTable() {
                           </Button>
                         </Tooltip>
                         <Tooltip title="Edit" className="">
-                          <Button style={{ minWidth: 0 }}>
+                          <Button
+                            style={{ minWidth: 0 }}
+                            onClick={() =>
+                              openUserDialogWithType(TYPE_USER_DIALOG.EDIT)
+                            }
+                          >
                             <MdBuild
                               color="#d4c72b"
                               className="inline icon-size-small action-icon"
