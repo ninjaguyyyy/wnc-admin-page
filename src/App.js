@@ -4,7 +4,6 @@ import { Switch, Route, useLocation, Redirect } from "react-router-dom";
 import "./css/style.scss";
 
 import { focusHandling } from "cruip-js-toolkit";
-import "./charts/ChartjsConfig";
 
 // Import pages
 import Users from "./pages/Users";

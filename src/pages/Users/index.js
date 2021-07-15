@@ -2,13 +2,11 @@ import Button from "@material-ui/core/Button";
 import React, { useState } from "react";
 import { MdDirectionsBike, MdLocalHotel } from "react-icons/md";
 import DashboardAvatars from "../../partials/dashboard/DashboardAvatars";
-import DashboardCard06 from "../../partials/dashboard/DashboardCard06";
-import DashboardCard07 from "../../partials/dashboard/DashboardCard07";
-import DashboardCard10 from "../../partials/dashboard/DashboardCard10";
-import DashboardCard11 from "../../partials/dashboard/DashboardCard11";
 import WelcomeBanner from "../../partials/dashboard/WelcomeBanner";
 import Header from "../../partials/Header";
 import Sidebar from "../../partials/Sidebar";
+import UsersChart from "./components/UsersChart";
+import UsersTable from "./components/UsersTable";
 
 function Users() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -51,15 +49,8 @@ function Users() {
             </div>
 
             <div className="grid grid-cols-12 gap-6">
-              {/* Doughnut chart (Top Countries) */}
-              <DashboardCard06 />
-              {/* Table (Top Channels) */}
-              <DashboardCard07 />
-
-              {/* Card (Customers) */}
-              <DashboardCard10 />
-              {/* Card (Reasons for Refunds) */}
-              <DashboardCard11 />
+              <UsersChart />
+              <UsersTable />
             </div>
           </div>
         </main>
