@@ -102,12 +102,14 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                 exact
                 to="/"
                 className={`block text-gray-200 hover:text-white transition duration-150 ${
-                  page === "" && "hover:text-gray-200"
+                  page === "courses" && "hover:text-gray-200"
                 }`}
               >
                 <div className="flex flex-grow">
                   <div
-                    className="flex-shrink-0 h-6 w-6 mr-3 active-sidebar"
+                    className={`flex-shrink-0 h-6 w-6 mr-3 ${
+                      page === "courses" && "active-sidebar"
+                    }`}
                     style={{ fontSize: "20px" }}
                   >
                     <BsDisplayFill />
@@ -126,12 +128,14 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                 exact
                 to="/users"
                 className={`block text-gray-200 hover:text-white transition duration-150 ${
-                  page === "customers" && "hover:text-gray-200"
+                  page === "users" && "hover:text-gray-200"
                 }`}
               >
                 <div className="flex flex-grow">
                   <div
-                    className="flex-shrink-0 h-6 w-6 mr-3 "
+                    className={`flex-shrink-0 h-6 w-6 mr-3 ${
+                      page === "users" && "active-sidebar"
+                    }`}
                     style={{ fontSize: "20px" }}
                   >
                     <BsFillPeopleFill />
@@ -154,7 +158,9 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
               >
                 <div className="flex flex-grow">
                   <div
-                    className="flex-shrink-0 h-6 w-6 mr-3"
+                    className={`flex-shrink-0 h-6 w-6 mr-3 ${
+                      page === "categories" && "active-sidebar"
+                    }`}
                     style={{ fontSize: "20px" }}
                   >
                     <BsFillInboxesFill />
