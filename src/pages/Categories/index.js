@@ -23,7 +23,7 @@ function Categories() {
             <h1 className="heading mb-8">Categories Management</h1>
             <div className="sm:flex sm:justify-end sm:items-center mb-3">
               <Button variant="contained" color="primary" endIcon={<MdQueue />}>
-                Add New
+                Add Category
               </Button>
             </div>
 

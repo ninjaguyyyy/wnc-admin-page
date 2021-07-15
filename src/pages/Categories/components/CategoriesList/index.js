@@ -1,5 +1,7 @@
 import React from "react";
 import { MdBuild, MdDelete } from "react-icons/md";
+import Tooltip from "@material-ui/core/Tooltip";
+import Button from "@material-ui/core/Button";
 
 import Image01 from "../../../../images/user-36-05.jpg";
 import Image02 from "../../../../images/user-36-06.jpg";
@@ -100,14 +102,22 @@ function CategoriesList() {
                     </td>
                     <td className="p-2 whitespace-nowrap">
                       <div className="text-lg text-right">
-                        <MdBuild
-                          color="#d4c72b"
-                          className="inline mr-4 icon-size-small action-icon"
-                        />
-                        <MdDelete
-                          color="#d23030"
-                          className="inline icon-size-small action-icon"
-                        />
+                        <Tooltip title="Edit" className="">
+                          <Button style={{ minWidth: 0 }}>
+                            <MdBuild
+                              color="#d4c72b"
+                              className="inline icon-size-small action-icon"
+                            />
+                          </Button>
+                        </Tooltip>
+                        <Tooltip title="Delete">
+                          <Button style={{ minWidth: 0 }}>
+                            <MdDelete
+                              color="#d23030"
+                              className="inline icon-size-small action-icon"
+                            />
+                          </Button>
+                        </Tooltip>
                       </div>
                     </td>
                   </tr>
