@@ -1,16 +1,16 @@
 import Button from "@material-ui/core/Button";
 import React, { useState } from "react";
 import { MdDirectionsBike, MdLocalHotel } from "react-icons/md";
-import DashboardAvatars from "../partials/dashboard/DashboardAvatars";
-import DashboardCard06 from "../partials/dashboard/DashboardCard06";
-import DashboardCard07 from "../partials/dashboard/DashboardCard07";
-import DashboardCard10 from "../partials/dashboard/DashboardCard10";
-import DashboardCard11 from "../partials/dashboard/DashboardCard11";
-import WelcomeBanner from "../partials/dashboard/WelcomeBanner";
-import Header from "../partials/Header";
-import Sidebar from "../partials/Sidebar";
+import DashboardAvatars from "../../partials/dashboard/DashboardAvatars";
+import DashboardCard06 from "../../partials/dashboard/DashboardCard06";
+import DashboardCard07 from "../../partials/dashboard/DashboardCard07";
+import DashboardCard10 from "../../partials/dashboard/DashboardCard10";
+import DashboardCard11 from "../../partials/dashboard/DashboardCard11";
+import WelcomeBanner from "../../partials/dashboard/WelcomeBanner";
+import Header from "../../partials/Header";
+import Sidebar from "../../partials/Sidebar";
 
-function Dashboard() {
+function Categories() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
@@ -66,4 +66,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default Categories;

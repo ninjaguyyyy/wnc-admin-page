@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Switch, Route, useLocation } from "react-router-dom";
+import { Switch, Route, useLocation, Redirect } from "react-router-dom";
 
 import "./css/style.scss";
 
@@ -8,6 +8,9 @@ import "./charts/ChartjsConfig";
 
 // Import pages
 import Dashboard from "./pages/Dashboard";
+import Users from "./pages/Users";
+import Categories from "./pages/Categories";
+import Courses from "./pages/Courses";
 import Login from "./pages/Login";
 
 function App() {
@@ -24,7 +27,16 @@ function App() {
     <>
       <Switch>
         <Route exact path="/">
-          <Dashboard />
+          <Redirect to="/courses" />
+        </Route>
+        <Route exact path="/courses">
+          <Courses />
+        </Route>
+        <Route exact path="/users">
+          <Users />
+        </Route>
+        <Route exact path="/categories">
+          <Categories />
         </Route>
         <Route exact path="/login">
           <Login />

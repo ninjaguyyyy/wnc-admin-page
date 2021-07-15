@@ -9,6 +9,10 @@ body {
   overflow: hidden;
 }
 
+.active-sidebar {
+  color: #4f46e5;
+}
+
 .wave {
   position: fixed;
   bottom: 0;
