@@ -8,8 +8,10 @@ import Image02 from "../../../../images/user-36-06.jpg";
 import Image03 from "../../../../images/user-36-07.jpg";
 import Image04 from "../../../../images/user-36-08.jpg";
 import Image05 from "../../../../images/user-36-09.jpg";
+import { TYPE_ALERT, TYPE_DIALOG } from "../../../../common/constants";
 
-function CategoriesList() {
+function CategoriesList(props) {
+  const { openUserDialogWithType, openAlertWithType } = props;
   const customers = [
     {
       id: "0",
@@ -103,7 +105,12 @@ function CategoriesList() {
                     <td className="p-2 whitespace-nowrap">
                       <div className="text-lg text-right">
                         <Tooltip title="Edit" className="">
-                          <Button style={{ minWidth: 0 }}>
+                          <Button
+                            style={{ minWidth: 0 }}
+                            onClick={() =>
+                              openUserDialogWithType(TYPE_DIALOG.EDIT)
+                            }
+                          >
                             <MdBuild
                               color="#d4c72b"
                               className="inline icon-size-small action-icon"
@@ -113,6 +120,12 @@ function CategoriesList() {
                         <Tooltip title="Delete">
                           <Button style={{ minWidth: 0 }}>
                             <MdDelete
+                              onClick={() =>
+                                openAlertWithType(
+                                  TYPE_ALERT.ERROR,
+                                  "This category already has courses!"
+                                )
+                              }
                               color="#d23030"
                               className="inline icon-size-small action-icon"
                             />

@@ -1,19 +1,20 @@
-import React from "react";
-import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
+import Tooltip from "@material-ui/core/Tooltip";
+import Typography from "@material-ui/core/Typography";
+import React from "react";
 import {
   MdBuild,
   MdDelete,
-  MdRemoveRedEye,
+  MdLock,
   MdRemoveCircle,
+  MdRemoveRedEye,
 } from "react-icons/md";
-
+import { TYPE_DIALOG } from "../../../../common/constants";
 import Image01 from "../../../../images/user-36-05.jpg";
 import Image02 from "../../../../images/user-36-06.jpg";
 import Image03 from "../../../../images/user-36-07.jpg";
 import Image04 from "../../../../images/user-36-08.jpg";
 import Image05 from "../../../../images/user-36-09.jpg";
-import { TYPE_USER_DIALOG } from "../..";
 
 function UsersTable(props) {
   const { openUserDialogWithType } = props;
@@ -79,10 +80,13 @@ function UsersTable(props) {
                   <div className="font-semibold text-left">Email</div>
                 </th>
                 <th className="p-2 whitespace-nowrap">
-                  <div className="font-semibold text-left">Spent</div>
+                  <div className="font-semibold text-left">Username</div>
                 </th>
                 <th className="p-2 whitespace-nowrap">
-                  <div className="font-semibold text-left">Country</div>
+                  <div className="font-semibold text-left">Role</div>
+                </th>
+                <th className="p-2 whitespace-nowrap">
+                  <div className="font-semibold text-center">Active</div>
                 </th>
                 <th className="p-2 whitespace-nowrap">
                   <div className="font-semibold text-right">Actions</div>
@@ -124,11 +128,23 @@ function UsersTable(props) {
                       </div>
                     </td>
                     <td className="p-2 whitespace-nowrap">
+                      <div className="text-lg text-center">
+                        <Tooltip title="View" className="">
+                          <Typography className="inline">
+                            <MdLock
+                              color="#2da040"
+                              className="inline icon-size-small"
+                            />
+                          </Typography>
+                        </Tooltip>
+                      </div>
+                    </td>
+                    <td className="p-2 whitespace-nowrap">
                       <div className="text-lg text-right">
                         <Tooltip title="View" className="">
                           <Button
                             onClick={() =>
-                              openUserDialogWithType(TYPE_USER_DIALOG.VIEW)
+                              openUserDialogWithType(TYPE_DIALOG.VIEW)
                             }
                             style={{ minWidth: 0 }}
                           >
@@ -142,7 +158,7 @@ function UsersTable(props) {
                           <Button
                             style={{ minWidth: 0 }}
                             onClick={() =>
-                              openUserDialogWithType(TYPE_USER_DIALOG.EDIT)
+                              openUserDialogWithType(TYPE_DIALOG.EDIT)
                             }
                           >
                             <MdBuild
