@@ -1,5 +1,5 @@
 import Button from "@material-ui/core/Button";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MdDirectionsBike, MdLocalHotel } from "react-icons/md";
 import DashboardAvatars from "../../partials/dashboard/DashboardAvatars";
 import WelcomeBanner from "../../partials/dashboard/WelcomeBanner";
@@ -9,11 +9,23 @@ import UsersChart from "./components/UsersChart";
 import UsersTable from "./components/UsersTable";
 import UserDialog from "./components/UserDialog";
 import { TYPE_DIALOG } from "../../common/constants";
+import { userService } from "../../services";
 
 function Users() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [openUserDialog, setOpenUserDialog] = useState(false);
   const [typeUserDialog, setTypeUserDialog] = useState(TYPE_DIALOG.VIEW);
+
+  useEffect(() => {
+    (async () => {
+      const users = await userService.getAll();
+      console.log(users);
+    })();
+
+    return () => {
+      // cleanup
+    };
+  }, []);
 
   return (
     <div className="flex h-screen overflow-hidden">
