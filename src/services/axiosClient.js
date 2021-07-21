@@ -30,4 +30,17 @@ axiosClient.interceptors.response.use(
   }
 );
 
+axiosClient.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  async function (error) {
+    console.log(error);
+    if (error.response.status === 401) {
+      localStorage.removeItem("token");
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default axiosClient;

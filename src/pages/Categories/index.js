@@ -14,6 +14,7 @@ import { categoriesService } from "../../services";
 
 function Categories() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isReload, setIsReload] = useState(false);
   const [openDialog, setOpenDialog] = useState({
     open: false,
     type: TYPE_DIALOG.VIEW,
@@ -38,9 +39,13 @@ function Categories() {
     return () => {
       // cleanup;
     };
-  }, []);
+  }, [isReload]);
 
+  const resetDialogData = () => {
+    setOpenDialog({ open: false, type: TYPE_DIALOG.VIEW, categoryId: null });
+  };
   const getCategoryById = (id) => {
+    if (!id) return null;
     return categories.find((category) => {
       return category._id === id;
     });
@@ -64,7 +69,7 @@ function Categories() {
                 endIcon={<MdQueue />}
                 onClick={() => {
                   setOpenDialog({
-                    ...openDialog,
+                    categoryId: null,
                     open: true,
                     type: TYPE_DIALOG.NEW,
                   });
@@ -93,8 +98,12 @@ function Categories() {
       <CategoryDialog
         category={getCategoryById(openDialog.categoryId)}
         open={openDialog.open}
-        close={() => setOpenDialog({ ...openDialog, open: false })}
+        close={(isReload = false) => {
+          resetDialogData();
+          isReload && setIsReload(isReload);
+        }}
         type={openDialog.type}
+        rootCategories={categories.filter((category) => !category.parent)}
       />
 
       <Snackbar

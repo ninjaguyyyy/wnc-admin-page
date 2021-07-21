@@ -10,7 +10,6 @@ import {
 } from "react-icons/md";
 
 function CategoriesTree({ categories }) {
-  console.log(categories);
   const renderTree = (nodes) =>
     nodes.map(
       (node) =>

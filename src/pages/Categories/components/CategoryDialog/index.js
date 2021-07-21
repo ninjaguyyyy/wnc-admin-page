@@ -4,31 +4,62 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import MenuItem from "@material-ui/core/MenuItem";
+import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import { useTheme } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import React from "react";
+import React, { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { TYPE_DIALOG } from "../../../../common/constants";
+import { categoriesService } from "../../../../services";
 
 export default function CategoryDialog(props) {
-  const { open, close, type, category } = props;
+  const { open, close, type, category, rootCategories } = props;
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
-  const { control, handleSubmit } = useForm();
+  const { control, handleSubmit, setValue, reset } = useForm();
+
   const onSubmit = (data) => {
-    console.log(category);
-    console.log(data);
+    if (type === TYPE_DIALOG.NEW) {
+      (async () => {
+        const { success } = await categoriesService.create({
+          name: data.name,
+          parent: data.parent === 0 ? null : data.parent,
+        });
+
+        success && close(Math.random());
+      })();
+    } else {
+      let { parent, ...dataToUpdate } = data;
+      (async () => {
+        const { success } = await categoriesService.update(
+          category._id,
+          dataToUpdate
+        );
+
+        success && close(Math.random());
+      })();
+    }
   };
+
+  useEffect(() => {
+    if (type === TYPE_DIALOG.EDIT) {
+      setValue("name", category.name);
+    } else {
+      setValue("name", "");
+    }
+    return () => {
+      // cleanup
+    };
+  }, [open]);
 
   return (
     <div>
       <Dialog
         fullScreen={fullScreen}
         open={open}
-        onClose={close}
+        onClose={() => close(false)}
         aria-labelledby="responsive-dialog-title"
       >
         <DialogTitle id="responsive-dialog-title">
@@ -39,54 +70,65 @@ export default function CategoryDialog(props) {
           <form onSubmit={handleSubmit(onSubmit)} style={{ width: "500px" }}>
             <Grid container>
               <Controller
-                name="title"
+                name="name"
                 control={control}
-                defaultValue={category?.name}
-                render={({ field }) => (
-                  <TextField
-                    id="outlined-basic"
-                    label="Name"
-                    variant="outlined"
-                    fullWidth
-                    style={{ marginBottom: "10px" }}
-                    {...field}
-                  />
+                defaultValue=""
+                rules={{
+                  required: true,
+                }}
+                render={({ field, fieldState }) => (
+                  <>
+                    <TextField
+                      id="outlined-basic"
+                      label="Name"
+                      variant="outlined"
+                      fullWidth
+                      style={{ marginBottom: "10px" }}
+                      {...field}
+                    />
+                    {fieldState.error && (
+                      <span className="error-field">
+                        This field is required!
+                      </span>
+                    )}
+                  </>
                 )}
               />
-              <Controller
-                name="parent"
-                control={control}
-                defaultValue={category?.parent}
-                render={({ field }) => (
-                  <Select
-                    labelId="demo-simple-select-outlined-label"
-                    id="demo-simple-select-outlined"
-                    variant="outlined"
-                    fullWidth
-                    label="Parent"
-                    {...field}
-                  >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                  </Select>
-                )}
-              />
+              {type === TYPE_DIALOG.NEW && (
+                <Controller
+                  name="parent"
+                  control={control}
+                  defaultValue={0}
+                  render={({ field }) => (
+                    <Select
+                      id="demo-simple-select-outlined"
+                      variant="outlined"
+                      fullWidth
+                      label="Parent"
+                      {...field}
+                      native
+                    >
+                      <option value={0}>Root</option>
+                      {rootCategories.map((rootCategory) => (
+                        <option value={rootCategory._id}>
+                          {rootCategory.name}
+                        </option>
+                      ))}
+                    </Select>
+                  )}
+                />
+              )}
             </Grid>
           </form>
         </DialogContent>
         <DialogActions>
-          <Button onClick={close} color="primary">
+          <Button onClick={() => close(false)} color="primary">
             Close
           </Button>
 
           {type !== TYPE_DIALOG.VIEW && (
             <Button
               onClick={() => {
-                close();
                 handleSubmit(onSubmit)();
               }}
               color="primary"

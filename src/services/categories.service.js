@@ -5,6 +5,8 @@ const url = "/categories";
 export const categoriesService = {
   getAll,
   getAllTree,
+  create,
+  update,
 };
 
 function getAll() {
@@ -14,4 +16,13 @@ function getAll() {
 function getAllTree() {
   const endpoint = url + "/tree";
   return axiosClient.get(endpoint);
+}
+
+function create(category) {
+  return axiosClient.post(url, category);
+}
+
+function update(id, category) {
+  const endpoint = url + `/${id}`;
+  return axiosClient.patch(endpoint, category);
 }
