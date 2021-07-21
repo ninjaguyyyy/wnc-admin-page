@@ -4,7 +4,6 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import { useTheme } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
@@ -18,7 +17,7 @@ export default function CategoryDialog(props) {
   const { open, close, type, category, rootCategories } = props;
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
-  const { control, handleSubmit, setValue, reset } = useForm();
+  const { control, handleSubmit, setValue } = useForm();
 
   const onSubmit = (data) => {
     if (type === TYPE_DIALOG.NEW) {

@@ -2,7 +2,7 @@ import axios from "axios";
 import queryString from "query-string";
 
 const axiosClient = axios.create({
-  baseURL: "http://localhost:3001/",
+  baseURL: "https://wnc-online-academy-21.herokuapp.com/",
   headers: { "content-type": "application/json" },
   paramsSerializer: function (params) {
     return queryString.stringify(params);
@@ -26,20 +26,10 @@ axiosClient.interceptors.response.use(
   },
   (error) => {
     //handle error
-    throw error;
-  }
-);
-
-axiosClient.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  async function (error) {
-    console.log(error);
     if (error.response.status === 401) {
       localStorage.removeItem("token");
     }
-    return Promise.reject(error);
+    throw error;
   }
 );
 
