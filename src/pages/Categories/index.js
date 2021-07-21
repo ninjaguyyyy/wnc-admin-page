@@ -1,5 +1,5 @@
 import Button from "@material-ui/core/Button";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MdQueue } from "react-icons/md";
 import WelcomeBanner from "../../partials/dashboard/WelcomeBanner";
 import Header from "../../partials/Header";
@@ -10,16 +10,41 @@ import CategoryDialog from "./components/CategoryDialog";
 import { TYPE_DIALOG } from "../../common/constants";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
+import { categoriesService } from "../../services";
 
 function Categories() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [openCategoryDialog, setOpenCategoryDialog] = useState(false);
-  const [typeDialog, setTypeDialog] = useState(TYPE_DIALOG.VIEW);
+  const [openDialog, setOpenDialog] = useState({
+    open: false,
+    type: TYPE_DIALOG.VIEW,
+    categoryId: null,
+  });
   const [openAlert, setOpenAlert] = useState({
     open: false,
     type: null,
     message: "",
   });
+
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      const { categories } = await categoriesService.getAll();
+      if (categories) {
+        setCategories(categories);
+      }
+      console.log(categories);
+    })();
+    return () => {
+      // cleanup;
+    };
+  }, []);
+
+  const getCategoryById = (id) => {
+    return categories.find((category) => {
+      return category._id === id;
+    });
+  };
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -38,8 +63,11 @@ function Categories() {
                 color="primary"
                 endIcon={<MdQueue />}
                 onClick={() => {
-                  setOpenCategoryDialog(true);
-                  setTypeDialog(TYPE_DIALOG.NEW);
+                  setOpenDialog({
+                    ...openDialog,
+                    open: true,
+                    type: TYPE_DIALOG.NEW,
+                  });
                 }}
               >
                 Add Category
@@ -47,11 +75,11 @@ function Categories() {
             </div>
 
             <div className="grid grid-cols-12 gap-6">
-              <CategoriesTree />
+              <CategoriesTree categories={categories} />
               <CategoriesList
-                openUserDialogWithType={(type) => {
-                  setOpenCategoryDialog(true);
-                  setTypeDialog(type);
+                categories={categories}
+                openDialogWith={(type, categoryId) => {
+                  setOpenDialog({ open: true, type, categoryId });
                 }}
                 openAlertWithType={(type, message) => {
                   setOpenAlert({ open: true, type, message });
@@ -63,9 +91,10 @@ function Categories() {
       </div>
 
       <CategoryDialog
-        open={openCategoryDialog}
-        close={() => setOpenCategoryDialog(false)}
-        type={typeDialog}
+        category={getCategoryById(openDialog.categoryId)}
+        open={openDialog.open}
+        close={() => setOpenDialog({ ...openDialog, open: false })}
+        type={openDialog.type}
       />
 
       <Snackbar

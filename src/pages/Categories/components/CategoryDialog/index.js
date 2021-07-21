@@ -14,11 +14,14 @@ import { Controller, useForm } from "react-hook-form";
 import { TYPE_DIALOG } from "../../../../common/constants";
 
 export default function CategoryDialog(props) {
-  const { open, close, type } = props;
+  const { open, close, type, category } = props;
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const { control, handleSubmit } = useForm();
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data) => {
+    console.log(category);
+    console.log(data);
+  };
 
   return (
     <div>
@@ -36,13 +39,13 @@ export default function CategoryDialog(props) {
           <form onSubmit={handleSubmit(onSubmit)} style={{ width: "500px" }}>
             <Grid container>
               <Controller
-                name="username"
+                name="title"
                 control={control}
-                defaultValue=""
+                defaultValue={category?.name}
                 render={({ field }) => (
                   <TextField
                     id="outlined-basic"
-                    label="Outlined"
+                    label="Name"
                     variant="outlined"
                     fullWidth
                     style={{ marginBottom: "10px" }}
@@ -51,17 +54,16 @@ export default function CategoryDialog(props) {
                 )}
               />
               <Controller
-                name="email"
+                name="parent"
                 control={control}
-                defaultValue=""
+                defaultValue={category?.parent}
                 render={({ field }) => (
                   <Select
                     labelId="demo-simple-select-outlined-label"
                     id="demo-simple-select-outlined"
-                    value={10}
                     variant="outlined"
                     fullWidth
-                    label="Age"
+                    label="Parent"
                     {...field}
                   >
                     <MenuItem value="">

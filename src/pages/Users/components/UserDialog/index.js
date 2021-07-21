@@ -16,11 +16,13 @@ import { Controller, useForm } from "react-hook-form";
 import { TYPE_DIALOG } from "../../../../common/constants";
 
 export default function UserDialog(props) {
-  const { open, close, type } = props;
+  const { open, close, type, user } = props;
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const { control, handleSubmit } = useForm();
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data) => {
+    console.log(data);
+  };
 
   return (
     <div>
@@ -41,7 +43,7 @@ export default function UserDialog(props) {
               <Controller
                 name="username"
                 control={control}
-                defaultValue=""
+                defaultValue={user?.userName}
                 render={({ field }) => (
                   <TextField
                     id="outlined-basic"
@@ -56,7 +58,7 @@ export default function UserDialog(props) {
               <Controller
                 name="email"
                 control={control}
-                defaultValue=""
+                defaultValue={"a"}
                 render={({ field }) => (
                   <TextField
                     id="outlined-basic"

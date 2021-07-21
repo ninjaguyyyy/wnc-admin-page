@@ -13,12 +13,19 @@ import { userService } from "../../services";
 
 function Users() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [openUserDialog, setOpenUserDialog] = useState(false);
-  const [typeUserDialog, setTypeUserDialog] = useState(TYPE_DIALOG.VIEW);
+  const [openUserDialog, setOpenUserDialog] = useState({
+    open: false,
+    type: TYPE_DIALOG.VIEW,
+    userId: null,
+  });
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     (async () => {
-      const users = await userService.getAll();
+      const { users } = await userService.getAll();
+      if (users) {
+        setUsers(users);
+      }
       console.log(users);
     })();
 
@@ -26,6 +33,12 @@ function Users() {
       // cleanup
     };
   }, []);
+
+  const getUserById = (id) => {
+    return users.find((user) => {
+      return user._id === id;
+    });
+  };
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -63,18 +76,26 @@ function Users() {
 
               <DashboardAvatars
                 openUserDialogWithType={(type) => {
-                  setOpenUserDialog(true);
-                  setTypeUserDialog(type);
+                  setOpenUserDialog({
+                    ...openUserDialog,
+                    open: true,
+                    type: TYPE_DIALOG.NEW,
+                  });
                 }}
               />
             </div>
 
             <div className="grid grid-cols-12 gap-6">
-              <UsersChart />
+              <UsersChart users={users} />
               <UsersTable
-                openUserDialogWithType={(type) => {
-                  setOpenUserDialog(true);
-                  setTypeUserDialog(type);
+                users={users}
+                openUserDialogWithType={(type, userId = null) => {
+                  setOpenUserDialog({
+                    ...openUserDialog,
+                    open: true,
+                    type,
+                    userId,
+                  });
                 }}
               />
             </div>
@@ -83,9 +104,10 @@ function Users() {
       </div>
 
       <UserDialog
-        open={openUserDialog}
+        user={getUserById(openUserDialog.userId)}
+        open={openUserDialog.open}
         close={() => setOpenUserDialog(false)}
-        type={typeUserDialog}
+        type={openUserDialog.type}
       ></UserDialog>
     </div>
   );

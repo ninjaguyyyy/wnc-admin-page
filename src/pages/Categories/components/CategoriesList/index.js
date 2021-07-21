@@ -1,59 +1,11 @@
+import Button from "@material-ui/core/Button";
+import Tooltip from "@material-ui/core/Tooltip";
 import React from "react";
 import { MdBuild, MdDelete } from "react-icons/md";
-import Tooltip from "@material-ui/core/Tooltip";
-import Button from "@material-ui/core/Button";
-
-import Image01 from "../../../../images/user-36-05.jpg";
-import Image02 from "../../../../images/user-36-06.jpg";
-import Image03 from "../../../../images/user-36-07.jpg";
-import Image04 from "../../../../images/user-36-08.jpg";
-import Image05 from "../../../../images/user-36-09.jpg";
 import { TYPE_ALERT, TYPE_DIALOG } from "../../../../common/constants";
 
 function CategoriesList(props) {
-  const { openUserDialogWithType, openAlertWithType } = props;
-  const customers = [
-    {
-      id: "0",
-      image: Image01,
-      name: "Alex Shatov",
-      email: "alexshatov@gmail.com",
-      location: "🇺🇸",
-      spent: "$2,890.66",
-    },
-    {
-      id: "1",
-      image: Image02,
-      name: "Philip Harbach",
-      email: "philip.h@gmail.com",
-      location: "🇩🇪",
-      spent: "$2,767.04",
-    },
-    {
-      id: "2",
-      image: Image03,
-      name: "Mirko Fisuk",
-      email: "mirkofisuk@gmail.com",
-      location: "🇫🇷",
-      spent: "$2,996.00",
-    },
-    {
-      id: "3",
-      image: Image04,
-      name: "Olga Semklo",
-      email: "olga.s@cool.design",
-      location: "🇮🇹",
-      spent: "$1,220.66",
-    },
-    {
-      id: "4",
-      image: Image05,
-      name: "Burak Long",
-      email: "longburak@gmail.com",
-      location: "🇬🇧",
-      spent: "$1,890.66",
-    },
-  ];
+  const { openDialogWith, openAlertWithType, categories } = props;
 
   return (
     <div className="col-span-full xl:col-span-8 bg-white shadow-lg rounded-sm border border-gray-200">
@@ -83,23 +35,29 @@ function CategoriesList(props) {
             </thead>
             {/* Table body */}
             <tbody className="text-sm divide-y divide-gray-100">
-              {customers.map((customer) => {
+              {categories.map((category) => {
                 return (
-                  <tr key={customer.id}>
-                    <td className="p-2 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="">{customer.name}</div>
+                  <tr key={category._id}>
+                    <td
+                      className="p-2 whitespace-nowrap"
+                      style={{ width: "320px" }}
+                    >
+                      <div className="items-center">
+                        <div className="">{category._id}</div>
                       </div>
                     </td>
-                    <td className="p-2 whitespace-nowrap">
+                    <td
+                      className="p-2 whitespace-nowrap"
+                      style={{ width: "280px" }}
+                    >
                       <div className="text-left font-medium text-gray-800">
-                        {customer.email}
+                        {category.name}
                       </div>
                     </td>
 
                     <td className="p-2 whitespace-nowrap">
-                      <div className="text-lg text-left">
-                        {customer.location}
+                      <div className="font-medium text-left">
+                        {category.parent?.name || "null"}
                       </div>
                     </td>
                     <td className="p-2 whitespace-nowrap">
@@ -108,7 +66,7 @@ function CategoriesList(props) {
                           <Button
                             style={{ minWidth: 0 }}
                             onClick={() =>
-                              openUserDialogWithType(TYPE_DIALOG.EDIT)
+                              openDialogWith(TYPE_DIALOG.EDIT, category._id)
                             }
                           >
                             <MdBuild
