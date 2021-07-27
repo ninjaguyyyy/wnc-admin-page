@@ -18,7 +18,9 @@ select:focus {
 input:focus {
   outline: none !important;
 }
-
+.disable-button {
+  color: #333;
+}
 .not-found {
   background-color: #141019;
   background: radial-gradient(at 50% -20%, #908392, #0d060e) fixed;

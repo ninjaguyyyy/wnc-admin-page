@@ -11,18 +11,71 @@ import { useTheme } from "@material-ui/core/styles";
 import Switch from "@material-ui/core/Switch";
 import TextField from "@material-ui/core/TextField";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { TYPE_DIALOG } from "../../../../common/constants";
+import { ROLE_USER, TYPE_DIALOG } from "../../../../common/constants";
+import { adminService } from "../../../../services/admin.service";
+const { uniqueNamesGenerator, names } = require("unique-names-generator");
 
-export default function UserDialog(props) {
-  const { open, close, type, user } = props;
+export default function UserDialog({ open, close, type, user }) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
-  const { control, handleSubmit } = useForm();
-  const onSubmit = (data) => {
-    console.log(data);
+  const { control, handleSubmit, setValue } = useForm();
+
+  const [isConfirmed, setIsConfirmed] = useState(true);
+  const [isActive, setIsActive] = useState(true);
+
+  const roles = [
+    { name: "Student", value: ROLE_USER.STUDENT },
+    { name: "Teacher", value: ROLE_USER.TEACHER },
+  ];
+  const randomNameConfig = {
+    dictionaries: [names],
   };
+  const isViewMode = type === TYPE_DIALOG.VIEW;
+  const isEditMode = type === TYPE_DIALOG.EDIT;
+  const isNewMode = type === TYPE_DIALOG.NEW;
+
+  const randomEmail = () =>
+    uniqueNamesGenerator(randomNameConfig) + "@gmail.com";
+
+  const onSubmit = (data) => {
+    if (isNewMode) {
+      (async () => {
+        // const { success } = await userService.create({ data });
+        const { success } = await adminService.create(data);
+
+        success && close(Math.random());
+      })();
+    } else {
+      // (async () => {
+      //   const { success } = await categoriesService.update(
+      //     category._id,
+      //     dataToUpdate
+      //   );
+      //   success && close(Math.random());
+      // })();
+    }
+  };
+
+  useEffect(() => {
+    if (type === TYPE_DIALOG.EDIT || type === TYPE_DIALOG.VIEW) {
+      setValue("userName", user?.userName);
+      setValue("email", user?.email);
+      setValue("firstName", user?.firstName);
+      setValue("lastName", user?.lastName);
+      setValue("role", user?.role);
+    } else {
+      setValue("userName", "");
+      setValue("email", randomEmail());
+      setValue("firstName", uniqueNamesGenerator(randomNameConfig));
+      setValue("lastName", uniqueNamesGenerator(randomNameConfig));
+      setValue("role", ROLE_USER.STUDENT);
+    }
+    return () => {
+      // cleanup
+    };
+  }, [open]);
 
   return (
     <div>
@@ -41,28 +94,67 @@ export default function UserDialog(props) {
           <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
             <Grid container>
               <Controller
-                name="username"
+                name="userName"
                 control={control}
                 defaultValue={user?.userName}
-                render={({ field }) => (
-                  <TextField
-                    id="outlined-basic"
-                    label="Outlined"
-                    variant="outlined"
-                    fullWidth
-                    style={{ marginBottom: "10px" }}
-                    {...field}
-                  />
+                rules={{
+                  required: true,
+                }}
+                render={({ field, fieldState }) => (
+                  <>
+                    <TextField
+                      id="outlined-basic"
+                      label="Username"
+                      disabled={isViewMode}
+                      variant="outlined"
+                      fullWidth
+                      style={{ marginBottom: "10px" }}
+                      {...field}
+                    />
+                    {fieldState.error && (
+                      <span className="error-field">
+                        This field is required!
+                      </span>
+                    )}
+                  </>
                 )}
               />
+              {type === TYPE_DIALOG.NEW && (
+                <Controller
+                  name="passWord"
+                  control={control}
+                  rules={{
+                    required: true,
+                  }}
+                  defaultValue=""
+                  render={({ field, fieldState }) => (
+                    <>
+                      <TextField
+                        id="outlined-basic"
+                        label="Password"
+                        variant="outlined"
+                        style={{ marginBottom: "10px" }}
+                        fullWidth
+                        {...field}
+                      />
+                      {fieldState.error && (
+                        <span className="error-field">
+                          This field is required!
+                        </span>
+                      )}
+                    </>
+                  )}
+                />
+              )}
               <Controller
                 name="email"
                 control={control}
-                defaultValue={"a"}
+                defaultValue=""
                 render={({ field }) => (
                   <TextField
                     id="outlined-basic"
-                    label="Outlined"
+                    disabled={isViewMode}
+                    label="Email"
                     variant="outlined"
                     style={{ marginBottom: "10px" }}
                     fullWidth
@@ -79,7 +171,8 @@ export default function UserDialog(props) {
                     render={({ field }) => (
                       <TextField
                         id="outlined-basic"
-                        label="Outlined"
+                        label="First Name"
+                        disabled={isViewMode}
                         variant="outlined"
                         fullWidth
                         {...field}
@@ -95,7 +188,8 @@ export default function UserDialog(props) {
                     render={({ field }) => (
                       <TextField
                         id="outlined-basic"
-                        label="Outlined"
+                        label="Last Name"
+                        disabled={isViewMode}
                         variant="outlined"
                         fullWidth
                         {...field}
@@ -108,65 +202,54 @@ export default function UserDialog(props) {
               <Grid container className="d-flex justify-between">
                 <div className="flex-1 mr-2">
                   <Controller
-                    name="iceCreamType"
+                    name="role"
                     control={control}
+                    defaultValue={ROLE_USER.STUDENT}
                     render={({ field }) => (
                       <Select
                         labelId="demo-simple-select-outlined-label"
                         id="demo-simple-select-outlined"
-                        value={10}
                         variant="outlined"
-                        label="Age"
+                        disabled={isViewMode}
+                        label="Role"
                         {...field}
+                        native
                       >
-                        <MenuItem value="">
-                          <em>None</em>
-                        </MenuItem>
-                        <MenuItem value={10}>Ten</MenuItem>
-                        <MenuItem value={20}>Twenty</MenuItem>
-                        <MenuItem value={30}>Thirty</MenuItem>
+                        {roles.map((rootCategory) => (
+                          <option value={rootCategory.value}>
+                            {rootCategory.name}
+                          </option>
+                        ))}
                       </Select>
                     )}
                   />
                 </div>
                 <div className="flex-1 ml-2 mt-2">
-                  <Controller
-                    name="lastName"
-                    control={control}
-                    defaultValue=""
-                    render={({ field }) => (
-                      <FormControlLabel
-                        control={
-                          <Switch
-                            // checked={state.checkedB}
-                            // onChange={handleChange}
-                            name="checkedB"
-                            color="secondary"
-                          />
-                        }
-                        label="isConfirmed"
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={isConfirmed}
+                        onChange={() => setIsConfirmed(!isConfirmed)}
+                        name="isConfirmed"
+                        disabled={isViewMode}
+                        color="secondary"
                       />
-                    )}
+                    }
+                    label="isConfirmed"
                   />
                 </div>
                 <div className="flex-1 ml-2 mt-2">
-                  <Controller
-                    name="lastName"
-                    control={control}
-                    defaultValue=""
-                    render={({ field }) => (
-                      <FormControlLabel
-                        control={
-                          <Switch
-                            // checked={state.checkedB}
-                            // onChange={handleChange}
-                            name="checkedB"
-                            color="primary"
-                          />
-                        }
-                        label="isActive"
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={isActive}
+                        onChange={() => setIsActive(!isActive)}
+                        name="checkedB"
+                        color="primary"
+                        disabled={isViewMode}
                       />
-                    )}
+                    }
+                    label="isActive"
                   />
                 </div>
               </Grid>
@@ -181,7 +264,6 @@ export default function UserDialog(props) {
           {type !== TYPE_DIALOG.VIEW && (
             <Button
               onClick={() => {
-                close();
                 handleSubmit(onSubmit)();
               }}
               color="primary"

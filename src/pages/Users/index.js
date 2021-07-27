@@ -19,6 +19,7 @@ function Users() {
     userId: null,
   });
   const [users, setUsers] = useState([]);
+  const [isReload, setIsReload] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -26,17 +27,24 @@ function Users() {
       if (users) {
         setUsers(users);
       }
-      console.log(users);
     })();
 
     return () => {
       // cleanup
     };
-  }, []);
+  }, [isReload]);
 
   const getUserById = (id) => {
     return users.find((user) => {
       return user._id === id;
+    });
+  };
+
+  const resetDialogData = () => {
+    setOpenUserDialog({
+      open: false,
+      type: TYPE_DIALOG.VIEW,
+      userId: null,
     });
   };
 
@@ -106,7 +114,10 @@ function Users() {
       <UserDialog
         user={getUserById(openUserDialog.userId)}
         open={openUserDialog.open}
-        close={() => setOpenUserDialog(false)}
+        close={(isReload = false) => {
+          resetDialogData();
+          isReload && setIsReload(isReload);
+        }}
         type={openUserDialog.type}
       ></UserDialog>
     </div>

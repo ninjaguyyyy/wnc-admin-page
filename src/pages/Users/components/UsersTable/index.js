@@ -10,11 +10,15 @@ import {
   MdRemoveRedEye,
   MdCheckCircle,
 } from "react-icons/md";
-import { TYPE_DIALOG } from "../../../../common/constants";
+import { ROLE_USER, TYPE_DIALOG } from "../../../../common/constants";
 import { transformToRoleName } from "../../../../helpers/role-name";
 
 function UsersTable(props) {
   const { users, openUserDialogWithType } = props;
+
+  const isAdminOrRealTeacher = (user) =>
+    user.role === ROLE_USER.ADMIN ||
+    (user.role === ROLE_USER.TEACHER && user.createdByAdmin);
 
   return (
     <div className="col-span-full xl:col-span-8 bg-white shadow-lg rounded-sm border border-gray-200">
@@ -122,29 +126,42 @@ function UsersTable(props) {
                         </Tooltip>
                         <Tooltip title="Edit" className="">
                           <Button
+                            disabled={isAdminOrRealTeacher(user)}
                             style={{ minWidth: 0 }}
                             onClick={() =>
                               openUserDialogWithType(TYPE_DIALOG.EDIT, user._id)
                             }
                           >
                             <MdBuild
-                              color="#d4c72b"
+                              color={
+                                isAdminOrRealTeacher(user) ? "#333" : "#d4c72b"
+                              }
                               className="inline icon-size-small action-icon"
                             />
                           </Button>
                         </Tooltip>
                         <Tooltip title="Disable" className="">
-                          <Button style={{ minWidth: 0 }}>
+                          <Button
+                            disabled={isAdminOrRealTeacher(user)}
+                            style={{ minWidth: 0 }}
+                          >
                             <MdRemoveCircle
-                              color="#292294"
+                              color={
+                                isAdminOrRealTeacher(user) ? "#333" : "#292294"
+                              }
                               className="inline icon-size-small action-icon"
                             />
                           </Button>
                         </Tooltip>
                         <Tooltip title="Delete">
-                          <Button style={{ minWidth: 0 }}>
+                          <Button
+                            disabled={isAdminOrRealTeacher(user)}
+                            style={{ minWidth: 0 }}
+                          >
                             <MdDelete
-                              color="#d23030"
+                              color={
+                                isAdminOrRealTeacher(user) ? "#333" : "#d23030"
+                              }
                               className="inline icon-size-small action-icon"
                             />
                           </Button>
