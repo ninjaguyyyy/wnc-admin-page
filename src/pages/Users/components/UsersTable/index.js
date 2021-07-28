@@ -12,13 +12,22 @@ import {
 } from "react-icons/md";
 import { ROLE_USER, TYPE_DIALOG } from "../../../../common/constants";
 import { transformToRoleName } from "../../../../helpers/role-name";
+import { adminService } from "../../../../services/admin.service";
 
-function UsersTable(props) {
-  const { users, openUserDialogWithType } = props;
-
+function UsersTable({ users, openUserDialogWithType, reload }) {
   const isAdminOrRealTeacher = (user) =>
     user.role === ROLE_USER.ADMIN ||
-    (user.role === ROLE_USER.TEACHER && user.createdByAdmin);
+    (user.role === ROLE_USER.TEACHER && !user.createdByAdmin);
+
+  const handleDelete = async (userId) => {
+    const { success } = await adminService.deleteUser(userId);
+    success && reload();
+  };
+
+  const handleUpdate = async (userId, dataToUpdate) => {
+    const { success } = await adminService.deleteUser(userId, dataToUpdate);
+    success && reload();
+  };
 
   return (
     <div className="col-span-full xl:col-span-8 bg-white shadow-lg rounded-sm border border-gray-200">
@@ -157,6 +166,7 @@ function UsersTable(props) {
                           <Button
                             disabled={isAdminOrRealTeacher(user)}
                             style={{ minWidth: 0 }}
+                            onClick={() => handleDelete(user._id)}
                           >
                             <MdDelete
                               color={

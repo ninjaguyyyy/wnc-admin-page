@@ -15,9 +15,11 @@ import React, { useState, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { ROLE_USER, TYPE_DIALOG } from "../../../../common/constants";
 import { adminService } from "../../../../services/admin.service";
+import { useAlert } from "react-alert";
 const { uniqueNamesGenerator, names } = require("unique-names-generator");
 
 export default function UserDialog({ open, close, type, user }) {
+  const alert = useAlert();
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const { control, handleSubmit, setValue } = useForm();
@@ -42,19 +44,18 @@ export default function UserDialog({ open, close, type, user }) {
   const onSubmit = (data) => {
     if (isNewMode) {
       (async () => {
-        // const { success } = await userService.create({ data });
-        const { success } = await adminService.create(data);
+        const { success, msg } = await adminService.create(data);
+
+        success && close(Math.random());
+        !success && alert.show(msg);
+      })();
+    } else {
+      data.isActivated = isConfirmed;
+      (async () => {
+        const { success, msg } = await adminService.updateUser(user._id, data);
 
         success && close(Math.random());
       })();
-    } else {
-      // (async () => {
-      //   const { success } = await categoriesService.update(
-      //     category._id,
-      //     dataToUpdate
-      //   );
-      //   success && close(Math.random());
-      // })();
     }
   };
 

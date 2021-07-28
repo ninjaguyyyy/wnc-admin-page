@@ -96,6 +96,7 @@ function Users() {
             <div className="grid grid-cols-12 gap-6">
               <UsersChart users={users} />
               <UsersTable
+                reload={() => setIsReload(true)}
                 users={users}
                 openUserDialogWithType={(type, userId = null) => {
                   setOpenUserDialog({

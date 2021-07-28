@@ -1,8 +1,11 @@
 import axios from "axios";
 import queryString from "query-string";
 
+const LOCAL = "http://localhost:3001/";
+const PRO = "https://wnc-online-academy-21.herokuapp.com/";
+
 const axiosClient = axios.create({
-  baseURL: "https://wnc-online-academy-21.herokuapp.com/",
+  baseURL: PRO,
   headers: { "content-type": "application/json" },
   paramsSerializer: function (params) {
     return queryString.stringify(params);
