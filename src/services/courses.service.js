@@ -1,8 +1,8 @@
 import axiosClient from "./axiosClient";
 
-const url = "/users";
+const url = "/courses";
 
-export const userService = {
+export const coursesService = {
   getAll,
 };
 

@@ -24,11 +24,6 @@ function UsersTable({ users, openUserDialogWithType, reload }) {
     success && reload();
   };
 
-  const handleUpdate = async (userId, dataToUpdate) => {
-    const { success } = await adminService.deleteUser(userId, dataToUpdate);
-    success && reload();
-  };
-
   return (
     <div className="col-span-full xl:col-span-8 bg-white shadow-lg rounded-sm border border-gray-200">
       <header className="px-5 py-4 border-b border-gray-100">

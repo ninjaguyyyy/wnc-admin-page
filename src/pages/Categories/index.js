@@ -34,7 +34,6 @@ function Categories() {
       if (categories) {
         setCategories(categories);
       }
-      console.log(categories);
     })();
     return () => {
       // cleanup;

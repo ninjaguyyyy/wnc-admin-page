@@ -5,17 +5,16 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import { useTheme } from "@material-ui/core/styles";
 import Switch from "@material-ui/core/Switch";
 import TextField from "@material-ui/core/TextField";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useAlert } from "react-alert";
 import { Controller, useForm } from "react-hook-form";
 import { ROLE_USER, TYPE_DIALOG } from "../../../../common/constants";
 import { adminService } from "../../../../services/admin.service";
-import { useAlert } from "react-alert";
 const { uniqueNamesGenerator, names } = require("unique-names-generator");
 
 export default function UserDialog({ open, close, type, user }) {
@@ -52,7 +51,7 @@ export default function UserDialog({ open, close, type, user }) {
     } else {
       data.isActivated = isConfirmed;
       (async () => {
-        const { success, msg } = await adminService.updateUser(user._id, data);
+        const { success } = await adminService.updateUser(user._id, data);
 
         success && close(Math.random());
       })();
@@ -60,7 +59,7 @@ export default function UserDialog({ open, close, type, user }) {
   };
 
   useEffect(() => {
-    if (type === TYPE_DIALOG.EDIT || type === TYPE_DIALOG.VIEW) {
+    if (isEditMode || isViewMode) {
       setValue("userName", user?.userName);
       setValue("email", user?.email);
       setValue("firstName", user?.firstName);

@@ -1,13 +1,27 @@
 import Button from "@material-ui/core/Button";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MdCreateNewFolder } from "react-icons/md";
 import WelcomeBanner from "../../partials/dashboard/WelcomeBanner";
 import Header from "../../partials/Header";
 import Sidebar from "../../partials/Sidebar";
+import { coursesService } from "../../services";
 import CoursesTable from "./components/CoursesTable";
 
 function Courses() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isReload, setIsReload] = useState(false);
+  const [courses, setCourses] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      const { courses } = await coursesService.getAll();
+      courses && setCourses(courses);
+    })();
+
+    return () => {
+      // cleanup
+    };
+  }, [isReload]);
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -31,7 +45,10 @@ function Courses() {
             </div>
 
             <div className="grid grid-cols-12 gap-6">
-              <CoursesTable />
+              <CoursesTable
+                courses={courses}
+                reload={(value) => setIsReload(value)}
+              />
             </div>
           </div>
         </main>

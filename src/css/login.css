@@ -21,6 +21,13 @@ input:focus {
 .disable-button {
   color: #333;
 }
+.spinner {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  width: 800%;
+  overflow: hidden;
+}
 .not-found {
   background-color: #141019;
   background: radial-gradient(at 50% -20%, #908392, #0d060e) fixed;
