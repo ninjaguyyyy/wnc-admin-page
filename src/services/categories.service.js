@@ -7,6 +7,7 @@ export const categoriesService = {
   getAllTree,
   create,
   update,
+  deleteCategory,
 };
 
 function getAll() {
@@ -25,4 +26,9 @@ function create(category) {
 function update(id, category) {
   const endpoint = url + `/${id}`;
   return axiosClient.patch(endpoint, category);
+}
+
+function deleteCategory(id) {
+  const endpoint = url + `/${id}`;
+  return axiosClient.delete(endpoint);
 }

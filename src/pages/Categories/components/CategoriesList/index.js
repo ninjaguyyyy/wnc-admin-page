@@ -3,9 +3,15 @@ import Tooltip from "@material-ui/core/Tooltip";
 import React from "react";
 import { MdBuild, MdDelete } from "react-icons/md";
 import { TYPE_ALERT, TYPE_DIALOG } from "../../../../common/constants";
+import { categoriesService } from "../../../../services";
 
 function CategoriesList(props) {
-  const { openDialogWith, openAlertWithType, categories } = props;
+  const { openDialogWith, openAlertWithType, categories, reload } = props;
+
+  const handleDelete = async (id) => {
+    const { success } = await categoriesService.deleteCategory(id);
+    success && reload();
+  };
 
   return (
     <div className="col-span-full xl:col-span-8 bg-white shadow-lg rounded-sm border border-gray-200">
@@ -57,7 +63,7 @@ function CategoriesList(props) {
 
                     <td className="p-2 whitespace-nowrap">
                       <div className="font-medium text-left">
-                        {category.parent?.name || "null"}
+                        {category.parent?.name || "root"}
                       </div>
                     </td>
                     <td className="p-2 whitespace-nowrap">
@@ -76,18 +82,21 @@ function CategoriesList(props) {
                           </Button>
                         </Tooltip>
                         <Tooltip title="Delete">
-                          <Button style={{ minWidth: 0 }}>
-                            <MdDelete
-                              onClick={() =>
-                                openAlertWithType(
-                                  TYPE_ALERT.ERROR,
-                                  "This category already has courses!"
-                                )
-                              }
-                              color="#d23030"
-                              className="inline icon-size-small action-icon"
-                            />
-                          </Button>
+                          <>
+                            <Button
+                              style={{ minWidth: 0 }}
+                              disabled={!!category.totalCourses}
+                            >
+                              <MdDelete
+                                onClick={() => handleDelete(category._id)}
+                                color={
+                                  category.totalCourses ? "#000" : "#d23030"
+                                }
+                                className="inline icon-size-small action-icon"
+                              />
+                            </Button>
+                            <span></span>
+                          </>
                         </Tooltip>
                       </div>
                     </td>

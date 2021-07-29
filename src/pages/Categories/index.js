@@ -11,10 +11,12 @@ import { TYPE_DIALOG } from "../../common/constants";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
 import { categoriesService } from "../../services";
+import { statisticsService } from "../../services/statistics.service";
 
 function Categories() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isReload, setIsReload] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [openDialog, setOpenDialog] = useState({
     open: false,
     type: TYPE_DIALOG.VIEW,
@@ -29,16 +31,41 @@ function Categories() {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
+    setIsLoading(true);
     (async () => {
       const { categories } = await categoriesService.getAll();
       if (categories) {
         setCategories(categories);
+        setIsLoading(false);
       }
     })();
     return () => {
       // cleanup;
     };
   }, [isReload]);
+
+  useEffect(() => {
+    (async () => {
+      const { success, statistics } =
+        await statisticsService.getTotalCoursesByCategories();
+      if (success) {
+        const updatedCategories = categories.map((category) => {
+          let totalCourses = 0;
+          let matchedStatistic = statistics.find(
+            (statistic) => statistic._id === category._id
+          );
+          if (matchedStatistic) {
+            totalCourses = matchedStatistic.total;
+          }
+          return { ...category, totalCourses };
+        });
+        setCategories(updatedCategories);
+      }
+    })();
+    return () => {
+      // cleanup;
+    };
+  }, [isLoading]);
 
   const resetDialogData = () => {
     setOpenDialog({ open: false, type: TYPE_DIALOG.VIEW, categoryId: null });
@@ -81,6 +108,7 @@ function Categories() {
             <div className="grid grid-cols-12 gap-6">
               <CategoriesTree categories={categories} />
               <CategoriesList
+                reload={() => setIsReload(Math.random())}
                 categories={categories}
                 openDialogWith={(type, categoryId) => {
                   setOpenDialog({ open: true, type, categoryId });

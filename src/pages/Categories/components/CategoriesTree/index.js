@@ -19,6 +19,7 @@ function CategoriesTree({ categories }) {
             nodeId={node._id}
             labelText={node.name}
             labelIcon={MdLabel}
+            labelInfo={node.totalCourses}
           >
             {node.child.length !== 0
               ? node.child.map((node) => (
@@ -27,10 +28,10 @@ function CategoriesTree({ categories }) {
                     nodeId={node._id}
                     labelText={node.name}
                     labelIcon={MdLocalLibrary}
-                    labelInfo="90"
+                    labelInfo={node.totalCourses}
                     color="#1a73e8"
                     bgColor="#e8f0fe"
-                  ></TreeItem>
+                  />
                 ))
               : null}
           </TreeItem>
