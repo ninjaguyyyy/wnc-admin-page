@@ -6,4 +6,4 @@
 
 ## Link
 
-https://vercel.com/ninjaguyyyy/wnc-admin
+https://wnc-admin.vercel.app/courses
